@@ -1,10 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Server, Activity, Globe, Key, Settings, Sliders, Database, Cpu, Zap, Microchip, Play, Pause, Terminal as TerminalIcon, BarChart3, Layers, Code, CheckCircle2 } from 'lucide-react';
+import { Server, Activity, Globe, Key, Settings, Sliders, Database, Cpu, Zap, Microchip, Play, Pause, Terminal as TerminalIcon, BarChart3, Layers, Code, CheckCircle2, Shield, Network, Map, Lock, RefreshCw, Box } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const Infrastructure: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'LB' | 'DNS' | 'API' | 'GPU'>('LB');
+  const [isApplying, setIsApplying] = useState(false);
   
+  // Load Balancer State
+  const [lbAlgo, setLbAlgo] = useState('ROUND_ROBIN');
+  const [sslEnabled, setSslEnabled] = useState(true);
+  const [healthCheckInterval, setHealthCheckInterval] = useState(30);
+
+  // DNS State
+  const [wafEnabled, setWafEnabled] = useState(true);
+  const [dnssec, setDnssec] = useState(true);
+
+  // API State
+  const [rateLimit, setRateLimit] = useState(1000);
+  const [apiGatewayStatus, setApiGatewayStatus] = useState('ONLINE');
+
   // GPU State
   const [gpuMode, setGpuMode] = useState(false);
   const [trainingActive, setTrainingActive] = useState(false);
@@ -83,6 +97,11 @@ const Infrastructure: React.FC = () => {
       }
   };
 
+  const handleApplyConfig = () => {
+      setIsApplying(true);
+      setTimeout(() => setIsApplying(false), 1500);
+  };
+
   return (
     <div className="h-full flex flex-col bg-slate-950 text-slate-200">
       <div className="border-b border-slate-800 p-6 bg-slate-900/50">
@@ -90,7 +109,7 @@ const Infrastructure: React.FC = () => {
            <Server className="text-indigo-400" />
            Badal Cloud Infrastructure
         </h1>
-        <p className="text-slate-400 mt-1">Manage Load Balancers, DNS Records, API Gateways, and AI Compute.</p>
+        <p className="text-slate-400 mt-1">High-performance Open Source Control Plane. Powered by SS360.</p>
       </div>
 
       <div className="flex border-b border-slate-800 overflow-x-auto">
@@ -123,130 +142,258 @@ const Infrastructure: React.FC = () => {
       <div className="flex-1 overflow-y-auto p-8 bg-slate-950/50">
          
          {activeTab === 'LB' && (
-            <div className="max-w-4xl space-y-8">
-               <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                  <div className="flex justify-between items-center mb-6">
-                     <div>
-                        <h3 className="text-lg font-semibold text-white">Global Traffic Distribution</h3>
-                        <p className="text-sm text-slate-500">Weighted Round Robin Configuration</p>
-                     </div>
-                     <span className="px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-xs font-mono uppercase">Healthy</span>
-                  </div>
+            <div className="max-w-6xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Visual Topology */}
+                    <div className="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-xl p-6 relative overflow-hidden">
+                        <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2"><Network size={20} className="text-cyan-400"/> Traffic Topology</h3>
+                        <div className="flex justify-between items-center h-64 relative z-10 px-8">
+                            {/* Client */}
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="p-4 bg-slate-800 rounded-full border border-slate-700 shadow-lg">
+                                    <Globe size={32} className="text-blue-400"/>
+                                </div>
+                                <span className="text-xs font-bold text-slate-500">Internet</span>
+                            </div>
+                            
+                            {/* Animated Line */}
+                            <div className="flex-1 h-1 bg-slate-800 mx-4 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent w-1/2 animate-[shimmer_2s_infinite]"></div>
+                            </div>
 
-                  <div className="space-y-6">
-                     {[
-                        { region: 'US East (N. Virginia)', weight: 45, load: 'High' },
-                        { region: 'EU West (Ireland)', weight: 30, load: 'Moderate' },
-                        { region: 'Asia Pacific (Tokyo)', weight: 25, load: 'Low' },
-                     ].map((node) => (
-                        <div key={node.region} className="space-y-2">
-                           <div className="flex justify-between text-sm">
-                              <span className="font-medium text-slate-300">{node.region}</span>
-                              <span className="text-slate-500">{node.weight}% Traffic</span>
-                           </div>
-                           <div className="flex items-center gap-4">
-                              <input type="range" min="0" max="100" defaultValue={node.weight} className="flex-1 accent-cyan-500 h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer" />
-                              <div className="w-24 text-right text-xs text-slate-400 border border-slate-700 rounded px-2 py-1">Load: {node.load}</div>
-                           </div>
+                            {/* LB Node */}
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="p-6 bg-cyan-900/20 rounded-xl border border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+                                    <Activity size={40} className="text-cyan-400"/>
+                                </div>
+                                <span className="text-xs font-bold text-cyan-400">Badal LB</span>
+                            </div>
+
+                            {/* Branching Lines */}
+                            <div className="flex flex-col h-full justify-center mx-4 gap-8">
+                                <div className="w-16 h-px bg-slate-700 relative overflow-hidden rotate-[-20deg] origin-left top-4">
+                                     <div className="absolute inset-0 bg-cyan-500 animate-[shimmer_2s_infinite] delay-75"></div>
+                                </div>
+                                <div className="w-16 h-px bg-slate-700 relative overflow-hidden rotate-[20deg] origin-left bottom-4">
+                                     <div className="absolute inset-0 bg-cyan-500 animate-[shimmer_2s_infinite] delay-150"></div>
+                                </div>
+                            </div>
+
+                            {/* Server Nodes */}
+                            <div className="flex flex-col gap-6">
+                                <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 border-l-4 border-l-green-500">
+                                    <Server size={20} className="text-slate-300"/>
+                                    <div>
+                                        <div className="text-xs font-bold text-white">US-East</div>
+                                        <div className="text-[10px] text-green-400">Healthy (24ms)</div>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg border border-slate-700 border-l-4 border-l-green-500">
+                                    <Server size={20} className="text-slate-300"/>
+                                    <div>
+                                        <div className="text-xs font-bold text-white">EU-West</div>
+                                        <div className="text-[10px] text-green-400">Healthy (88ms)</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                     ))}
-                  </div>
-               </div>
-               
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                     <h4 className="font-semibold text-white mb-4 flex items-center gap-2"><Settings size={16} /> SSL Termination</h4>
-                     <div className="flex items-center justify-between p-3 bg-slate-800 rounded-lg mb-2">
-                        <span className="text-sm text-slate-300">Force HTTPS</span>
-                        <div className="w-10 h-5 bg-cyan-600 rounded-full relative cursor-pointer"><div className="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div></div>
-                     </div>
-                     <div className="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-                         <span className="text-sm text-slate-300">HSTS Preload</span>
-                         <div className="w-10 h-5 bg-slate-600 rounded-full relative cursor-pointer"><div className="absolute left-1 top-1 w-3 h-3 bg-white rounded-full"></div></div>
-                     </div>
-                  </div>
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                     <h4 className="font-semibold text-white mb-4 flex items-center gap-2"><Sliders size={16} /> Auto-Scaling Policies</h4>
-                     <p className="text-sm text-slate-400 mb-4">Automatically adjust node count based on CPU utilization.</p>
-                     <div className="flex gap-2">
-                        <div className="flex-1 bg-slate-800 p-3 rounded text-center border border-slate-700 cursor-pointer hover:border-cyan-500">
-                           <div className="text-xl font-bold text-white">Min: 2</div>
+                    </div>
+
+                    {/* Configuration Panel */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col justify-between">
+                        <div>
+                            <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2"><Sliders size={20} className="text-purple-400"/> Balancing Strategy</h3>
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-500 uppercase">Algorithm</label>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {['ROUND_ROBIN', 'LEAST_CONN', 'IP_HASH', 'WEIGHTED'].map(algo => (
+                                            <button 
+                                                key={algo}
+                                                onClick={() => setLbAlgo(algo)}
+                                                className={`text-[10px] font-bold py-2 rounded border transition ${lbAlgo === algo ? 'bg-cyan-600 border-cyan-500 text-white' : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-white'}`}
+                                            >
+                                                {algo.replace('_', ' ')}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-500 uppercase">Health Check Interval</label>
+                                    <input 
+                                        type="range" 
+                                        min="5" max="300" 
+                                        value={healthCheckInterval} 
+                                        onChange={(e) => setHealthCheckInterval(parseInt(e.target.value))}
+                                        className="w-full accent-cyan-500"
+                                    />
+                                    <div className="text-right text-xs text-cyan-400 font-mono">{healthCheckInterval}s</div>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex-1 bg-slate-800 p-3 rounded text-center border border-slate-700 cursor-pointer hover:border-cyan-500">
-                           <div className="text-xl font-bold text-white">Max: 50</div>
+                        
+                        <div className="pt-6 border-t border-slate-800">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-sm font-bold text-white flex items-center gap-2"><Lock size={14}/> SSL Offloading</span>
+                                <button onClick={() => setSslEnabled(!sslEnabled)} className={`w-10 h-5 rounded-full relative transition-colors ${sslEnabled ? 'bg-green-500' : 'bg-slate-700'}`}>
+                                    <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${sslEnabled ? 'translate-x-6' : 'translate-x-1'}`}></div>
+                                </button>
+                            </div>
+                            <button 
+                                onClick={handleApplyConfig}
+                                className="w-full py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-bold shadow-lg shadow-cyan-900/20 flex items-center justify-center gap-2"
+                            >
+                                {isApplying ? <RefreshCw className="animate-spin" size={18}/> : <CheckCircle2 size={18}/>}
+                                {isApplying ? 'Propagating...' : 'Apply Configuration'}
+                            </button>
                         </div>
-                     </div>
-                  </div>
-               </div>
+                    </div>
+                </div>
             </div>
          )}
 
          {activeTab === 'DNS' && (
-            <div className="max-w-4xl">
-               <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
-                  <table className="w-full text-left text-sm">
-                     <thead className="bg-slate-800 text-slate-400">
-                        <tr>
-                           <th className="p-4 font-medium">Type</th>
-                           <th className="p-4 font-medium">Name</th>
-                           <th className="p-4 font-medium">Content</th>
-                           <th className="p-4 font-medium">TTL</th>
-                           <th className="p-4 font-medium">Proxy Status</th>
-                           <th className="p-4 font-medium">Action</th>
-                        </tr>
-                     </thead>
-                     <tbody className="divide-y divide-slate-800">
+            <div className="max-w-6xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Global Map Visualizer */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 relative overflow-hidden h-80">
+                        <div className="absolute inset-0 opacity-20 bg-[url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg')] bg-cover bg-center grayscale pointer-events-none"></div>
+                        <h3 className="text-lg font-bold text-white mb-2 relative z-10 flex items-center gap-2"><Map size={20} className="text-green-400"/> Global Propagation</h3>
+                        
+                        {/* Ping Points */}
                         {[
-                           { type: 'A', name: '@', content: '192.0.2.1', ttl: 'Auto', proxy: true },
-                           { type: 'CNAME', name: 'www', content: 'megamos.com', ttl: 'Auto', proxy: true },
-                           { type: 'MX', name: '@', content: 'mail.megamos.com', ttl: '1 min', proxy: false },
-                           { type: 'TXT', name: '@', content: 'v=spf1 include:_spf.google.com ~all', ttl: 'Auto', proxy: false },
-                        ].map((record, i) => (
-                           <tr key={i} className="hover:bg-slate-800/50">
-                              <td className="p-4 font-bold text-indigo-400">{record.type}</td>
-                              <td className="p-4 text-slate-300">{record.name}</td>
-                              <td className="p-4 font-mono text-slate-400">{record.content}</td>
-                              <td className="p-4 text-slate-500">{record.ttl}</td>
-                              <td className="p-4">
-                                 {record.proxy ? <span className="text-orange-400 flex items-center gap-1"><Globe size={12}/> Proxied</span> : <span className="text-slate-600 flex items-center gap-1"><Globe size={12}/> DNS Only</span>}
-                              </td>
-                              <td className="p-4 text-cyan-500 cursor-pointer hover:underline">Edit</td>
-                           </tr>
+                            { top: '30%', left: '20%', label: 'NA' },
+                            { top: '25%', left: '50%', label: 'EU' },
+                            { top: '40%', left: '70%', label: 'AS' },
+                            { top: '70%', left: '80%', label: 'AU' },
+                        ].map((pin, i) => (
+                            <div key={i} className="absolute flex flex-col items-center" style={{top: pin.top, left: pin.left}}>
+                                <div className="w-3 h-3 bg-green-500 rounded-full animate-ping absolute"></div>
+                                <div className="w-3 h-3 bg-green-500 rounded-full relative border border-black"></div>
+                                <span className="text-[10px] font-bold text-green-400 bg-black/50 px-1 rounded mt-1">{pin.label}</span>
+                            </div>
                         ))}
-                     </tbody>
-                  </table>
-                  <div className="p-4 border-t border-slate-800 bg-slate-800/30">
-                     <button className="text-sm bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded font-medium transition">
-                        + Add Record
-                     </button>
-                  </div>
-               </div>
+                    </div>
+
+                    <div className="space-y-6">
+                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                            <h3 className="font-bold text-white mb-4 flex items-center gap-2"><Shield size={18} className="text-orange-400"/> WAF & Security</h3>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between p-3 bg-slate-950 rounded border border-slate-800">
+                                    <div>
+                                        <div className="text-sm font-bold text-white">Web Application Firewall</div>
+                                        <div className="text-xs text-slate-500">Block SQLi, XSS, and bot traffic.</div>
+                                    </div>
+                                    <button onClick={() => setWafEnabled(!wafEnabled)} className={`w-10 h-5 rounded-full relative transition-colors ${wafEnabled ? 'bg-orange-500' : 'bg-slate-700'}`}>
+                                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${wafEnabled ? 'translate-x-6' : 'translate-x-1'}`}></div>
+                                    </button>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-slate-950 rounded border border-slate-800">
+                                    <div>
+                                        <div className="text-sm font-bold text-white">DNSSEC Signing</div>
+                                        <div className="text-xs text-slate-500">Cryptographic authentication of DNS records.</div>
+                                    </div>
+                                    <button onClick={() => setDnssec(!dnssec)} className={`w-10 h-5 rounded-full relative transition-colors ${dnssec ? 'bg-blue-500' : 'bg-slate-700'}`}>
+                                        <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-transform ${dnssec ? 'translate-x-6' : 'translate-x-1'}`}></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                             <div className="flex justify-between items-center mb-4">
+                                 <h3 className="font-bold text-white">DNS Records</h3>
+                                 <button className="text-xs bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded font-bold transition">+ Add Record</button>
+                             </div>
+                             <div className="space-y-2">
+                                 {[
+                                     { type: 'A', name: '@', val: '192.0.2.1', ttl: 'Auto' },
+                                     { type: 'CNAME', name: 'www', val: 'megamos.com', ttl: 'Auto' },
+                                     { type: 'TXT', name: '_dmarc', val: 'v=DMARC1; p=reject;', ttl: '1h' },
+                                 ].map((rec, i) => (
+                                     <div key={i} className="flex items-center justify-between p-2 bg-slate-950/50 rounded border border-slate-800 text-xs">
+                                         <span className="font-bold text-indigo-400 w-12">{rec.type}</span>
+                                         <span className="text-white w-20">{rec.name}</span>
+                                         <span className="text-slate-400 flex-1 font-mono truncate px-2">{rec.val}</span>
+                                         <span className="text-slate-600">{rec.ttl}</span>
+                                     </div>
+                                 ))}
+                             </div>
+                        </div>
+                    </div>
+                </div>
             </div>
          )}
 
          {activeTab === 'API' && (
-             <div className="max-w-4xl space-y-6">
-                 <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-                    <h3 className="font-semibold text-white mb-4">API Tokens</h3>
-                    <div className="space-y-3">
-                       <div className="flex items-center justify-between p-4 bg-slate-800 rounded-lg border border-slate-700">
-                          <div className="flex items-center gap-3">
-                             <div className="p-2 bg-indigo-500/20 rounded text-indigo-400"><Key size={20} /></div>
-                             <div>
-                                <div className="font-medium text-white">Production API Key</div>
-                                <div className="text-xs text-slate-500">Last used: Just now</div>
+             <div className="max-w-6xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                     <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                         <h3 className="font-bold text-white mb-6 flex items-center gap-2"><Key size={20} className="text-yellow-400"/> API Secrets Vault</h3>
+                         <div className="space-y-4">
+                             <div className="p-4 bg-black/40 rounded-lg border border-slate-800 relative group">
+                                 <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Production Key</label>
+                                 <div className="font-mono text-sm text-green-400 truncate">sk_live_badal_892374...</div>
+                                 <button className="absolute top-2 right-2 p-1 hover:bg-slate-800 rounded text-slate-500 hover:text-white opacity-0 group-hover:opacity-100 transition"><Settings size={12}/></button>
                              </div>
-                          </div>
-                          <div className="font-mono text-slate-400 bg-slate-900 px-3 py-1 rounded text-sm select-all">sk_live_51Mz...q8j2</div>
-                       </div>
-                    </div>
-                 </div>
-                 <div className="bg-gradient-to-r from-indigo-900/40 to-cyan-900/40 border border-indigo-500/30 rounded-xl p-6">
-                    <h3 className="font-semibold text-indigo-300 mb-2">MCP Server Endpoint</h3>
-                    <p className="text-sm text-slate-400 mb-4">Use this endpoint to connect external agents to the Model Context Protocol server.</p>
-                    <code className="block bg-black/40 p-3 rounded text-green-400 font-mono text-sm">
-                       wss://api.megamos.com/v1/mcp/connect
-                    </code>
+                             <div className="p-4 bg-black/40 rounded-lg border border-slate-800 relative group">
+                                 <label className="text-xs font-bold text-slate-500 uppercase block mb-1">Test Key</label>
+                                 <div className="font-mono text-sm text-yellow-400 truncate">sk_test_badal_110293...</div>
+                                 <button className="absolute top-2 right-2 p-1 hover:bg-slate-800 rounded text-slate-500 hover:text-white opacity-0 group-hover:opacity-100 transition"><Settings size={12}/></button>
+                             </div>
+                             <button className="w-full py-2 border border-dashed border-slate-700 text-slate-500 hover:text-white hover:border-slate-500 rounded text-xs font-bold transition">
+                                 Rotate Secrets
+                             </button>
+                         </div>
+                     </div>
+
+                     <div className="lg:col-span-2 space-y-6">
+                         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                             <h3 className="font-bold text-white mb-6 flex items-center gap-2"><Layers size={20} className="text-blue-400"/> Service Mesh & Rate Limiting</h3>
+                             <div className="space-y-6">
+                                 <div>
+                                     <div className="flex justify-between text-sm mb-2">
+                                         <span className="text-slate-400">Global Rate Limit</span>
+                                         <span className="text-white font-mono">{rateLimit} req/s</span>
+                                     </div>
+                                     <input 
+                                        type="range" 
+                                        min="100" max="5000" step="100"
+                                        value={rateLimit}
+                                        onChange={(e) => setRateLimit(parseInt(e.target.value))}
+                                        className="w-full accent-blue-500"
+                                     />
+                                 </div>
+                                 
+                                 <div className="flex gap-4">
+                                     <div className="flex-1 p-4 bg-slate-950 rounded-lg border border-slate-800 flex items-center justify-between">
+                                         <div>
+                                             <div className="font-bold text-white text-sm">OIDC Auth</div>
+                                             <div className="text-xs text-slate-500">Badal Auth Integration</div>
+                                         </div>
+                                         <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                                     </div>
+                                     <div className="flex-1 p-4 bg-slate-950 rounded-lg border border-slate-800 flex items-center justify-between">
+                                         <div>
+                                             <div className="font-bold text-white text-sm">Telemetry</div>
+                                             <div className="text-xs text-slate-500">Prometheus / Grafana</div>
+                                         </div>
+                                         <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                         <div className="bg-gradient-to-r from-indigo-900/40 to-blue-900/40 border border-indigo-500/30 rounded-xl p-6 flex items-center justify-between">
+                             <div>
+                                 <h3 className="font-bold text-white text-lg">Generate Client SDK</h3>
+                                 <p className="text-sm text-slate-400">Auto-generate typed SDKs for TypeScript, Python, and Go based on your API schema.</p>
+                             </div>
+                             <button className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 shadow-lg shadow-indigo-900/20 transition transform hover:scale-105">
+                                 <Code size={18}/> Generate
+                             </button>
+                         </div>
+                     </div>
                  </div>
              </div>
          )}

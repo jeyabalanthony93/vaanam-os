@@ -21,6 +21,8 @@ export enum AppView {
   BADAL_AUTH = 'BADAL_AUTH',
   DOCS = 'DOCS',
   BADAL_RAG = 'BADAL_RAG',
+  BADAL_RAAG = 'BADAL_RAAG',
+  BADAL_PHONE = 'BADAL_PHONE',
 }
 
 export interface WindowState {

@@ -4,6 +4,10 @@
 
 
 
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
@@ -21,7 +25,9 @@ import {
   CloudOff,
   UserCheck,
   Book,
-  Database
+  Database,
+  Music,
+  Smartphone
 } from 'lucide-react';
 
 import BootSequence from './components/os/BootSequence';
@@ -49,6 +55,8 @@ import BadalAuth from './components/BadalAuth'; // New import
 import DocumentationHub from './components/DocumentationHub'; // New import
 import BadalRAG from './components/BadalRAG'; // New import
 import MegamBrowser from './components/MegamBrowser'; // New import
+import BadalRAAG from './components/BadalRAAG'; // New import
+import BadalPhone from './components/BadalPhone'; // New import
 
 import { AppView, WindowState, BootStep, SystemStats } from './types';
 
@@ -74,6 +82,8 @@ const APP_CONFIG: Record<AppView, { title: string, icon: any, defaultSize: { wid
   [AppView.BADAL_AUTH]: { title: 'Badal Auth Framework', icon: UserCheck, defaultSize: { width: 1000, height: 700 } },
   [AppView.DOCS]: { title: 'Megam Documentation', icon: Book, defaultSize: { width: 1100, height: 800 } },
   [AppView.BADAL_RAG]: { title: 'Badal RAG Server', icon: Database, defaultSize: { width: 1100, height: 800 } },
+  [AppView.BADAL_RAAG]: { title: 'BadalRAAG Audio Workstation', icon: Music, defaultSize: { width: 1100, height: 800 } },
+  [AppView.BADAL_PHONE]: { title: 'BadalPhone (Ephone)', icon: Smartphone, defaultSize: { width: 420, height: 820 } },
 };
 
 const App: React.FC = () => {
@@ -179,6 +189,8 @@ const App: React.FC = () => {
       case AppView.BADAL_AUTH: return <BadalAuth />;
       case AppView.DOCS: return <DocumentationHub />;
       case AppView.BADAL_RAG: return <BadalRAG />;
+      case AppView.BADAL_RAAG: return <BadalRAAG />;
+      case AppView.BADAL_PHONE: return <BadalPhone />;
       case AppView.BROWSER: return <MegamBrowser />;
       default: return <div className="p-4 text-white">App not found</div>;
     }
