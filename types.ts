@@ -25,6 +25,7 @@ export enum AppView {
   BADAL_PHONE = 'BADAL_PHONE',
   MEGAM_MARKETING = 'MEGAM_MARKETING',
   MEGAM_DC = 'MEGAM_DC',
+  MEGAM_SENTINEL = 'MEGAM_SENTINEL',
 }
 
 export interface WindowState {

@@ -7,6 +7,8 @@
 
 
 
+
+
 import React, { useState } from 'react';
 import { AppView } from '../../types';
 import { 
@@ -36,7 +38,8 @@ import {
   Music,
   Smartphone,
   Megaphone,
-  Box
+  Box,
+  ShieldAlert
 } from 'lucide-react';
 
 interface DesktopProps {
@@ -127,6 +130,10 @@ const Desktop: React.FC<DesktopProps> = ({ onLaunchApp }) => {
 
        {/* Column 3: Misc */}
        <div className="flex flex-col gap-6">
+           <AppContainer title="Security">
+                <DesktopIcon label="Sentinel" icon={ShieldAlert} onClick={() => onLaunchApp(AppView.MEGAM_SENTINEL)} color="text-red-500"/>
+           </AppContainer>
+
            <AppContainer title="System">
                <DesktopIcon label="Dashboard" icon={LayoutDashboard} onClick={() => onLaunchApp(AppView.DASHBOARD)} color="text-pink-400"/>
                <DesktopIcon label="Docs" icon={Book} onClick={() => onLaunchApp(AppView.DOCS)} color="text-blue-500"/>

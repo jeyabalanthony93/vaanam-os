@@ -12,6 +12,8 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
@@ -33,7 +35,8 @@ import {
   Music,
   Smartphone,
   Megaphone,
-  Box
+  Box,
+  ShieldAlert
 } from 'lucide-react';
 
 import BootSequence from './components/os/BootSequence';
@@ -65,6 +68,7 @@ import BadalRAAG from './components/BadalRAAG'; // New import
 import BadalPhone from './components/BadalPhone'; // New import
 import MegamMarketing from './components/MegamMarketing'; // New import
 import MegamDataCenter from './components/MegamDataCenter'; // New import
+import MegamSentinel from './components/MegamSentinel'; // New import
 
 import { AppView, WindowState, BootStep, SystemStats } from './types';
 
@@ -94,6 +98,7 @@ const APP_CONFIG: Record<AppView, { title: string, icon: any, defaultSize: { wid
   [AppView.BADAL_PHONE]: { title: 'BadalPhone (Ephone)', icon: Smartphone, defaultSize: { width: 420, height: 820 } },
   [AppView.MEGAM_MARKETING]: { title: 'Megam Marketing Suite', icon: Megaphone, defaultSize: { width: 1100, height: 800 } },
   [AppView.MEGAM_DC]: { title: 'Megam Virtual Data Center', icon: Box, defaultSize: { width: 1200, height: 850 } },
+  [AppView.MEGAM_SENTINEL]: { title: 'Megam Sentinel Security', icon: ShieldAlert, defaultSize: { width: 1150, height: 800 } },
 };
 
 const App: React.FC = () => {
@@ -204,6 +209,7 @@ const App: React.FC = () => {
       case AppView.BROWSER: return <MegamBrowser />;
       case AppView.MEGAM_MARKETING: return <MegamMarketing />;
       case AppView.MEGAM_DC: return <MegamDataCenter />;
+      case AppView.MEGAM_SENTINEL: return <MegamSentinel />;
       default: return <div className="p-4 text-white">App not found</div>;
     }
   };

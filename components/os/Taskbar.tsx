@@ -4,6 +4,8 @@
 
 
 
+
+
 import React, { useState, useEffect } from 'react';
 import { AppView, WindowState } from '../../types';
 import { Wifi, Battery, Volume2, Search, Power, ChevronUp, Terminal } from 'lucide-react';
@@ -42,7 +44,7 @@ const Taskbar: React.FC<TaskbarProps> = ({ windows, activeWindowId, onWindowClic
                  </div>
              </div>
              
-             <div className="grid grid-cols-2 gap-2">
+             <div className="grid grid-cols-2 gap-2 max-h-[400px] overflow-y-auto">
                 <MenuButton label="Terminal" onClick={() => { onLaunchApp(AppView.TERMINAL); setMenuOpen(false); }} />
                 <MenuButton label="Megam Browser" onClick={() => { onLaunchApp(AppView.BROWSER); setMenuOpen(false); }} />
                 <MenuButton label="Badal Apps" onClick={() => { onLaunchApp(AppView.WORKSPACE); setMenuOpen(false); }} />
@@ -57,6 +59,7 @@ const Taskbar: React.FC<TaskbarProps> = ({ windows, activeWindowId, onWindowClic
                 <MenuButton label="BadalPhone" onClick={() => { onLaunchApp(AppView.BADAL_PHONE); setMenuOpen(false); }} />
                 <MenuButton label="Megam Marketing" onClick={() => { onLaunchApp(AppView.MEGAM_MARKETING); setMenuOpen(false); }} />
                 <MenuButton label="Megam Data Center" onClick={() => { onLaunchApp(AppView.MEGAM_DC); setMenuOpen(false); }} />
+                <MenuButton label="Megam Sentinel" onClick={() => { onLaunchApp(AppView.MEGAM_SENTINEL); setMenuOpen(false); }} />
              </div>
 
              <div className="mt-2 pt-3 border-t border-slate-700 flex justify-between items-center text-slate-400">

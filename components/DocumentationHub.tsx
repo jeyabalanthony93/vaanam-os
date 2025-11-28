@@ -1,9 +1,11 @@
 
+
+
 import React, { useState } from 'react';
 import { Book, Shield, Lock, FileText, Code, Terminal, Key, CheckCircle2, AlertTriangle, Fingerprint, Loader2, ArrowRight, UserCheck, Layout, Server, Database, Globe, Cpu, Library, Download, Search, BarChart, Megaphone, Gauge, Zap, Grid, Layers, DollarSign, Package } from 'lucide-react';
 
 const DocumentationHub: React.FC = () => {
-  const [activeSection, setActiveSection] = useState<'PLATFORM' | 'APPS' | 'INFRA' | 'STORAGE' | 'PRICING' | 'FRAMEWORKS' | 'BROWSER' | 'DEV_GUIDE'>('PLATFORM');
+  const [activeSection, setActiveSection] = useState<'PLATFORM' | 'APPS' | 'INFRA' | 'STORAGE' | 'PRICING' | 'FRAMEWORKS' | 'BROWSER' | 'DEV_GUIDE' | 'SECURITY_GUIDE'>('PLATFORM');
   
   // Developer Guide Auth State
   const [isAuth, setIsAuth] = useState(false);
@@ -283,6 +285,42 @@ const DocumentationHub: React.FC = () => {
       </div>
   );
 
+  const renderSecurityGuide = () => (
+      <div className="space-y-8 max-w-4xl mx-auto animate-in fade-in duration-300">
+          <div>
+              <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-2"><Shield size={32} className="text-red-500"/> Security & Compliance</h1>
+              <p className="text-slate-400">How Megam OS achieves "Unbreakable" security using Open Source Intelligence (OSINT) and Neural Defense.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                  <h3 className="font-bold text-white mb-3">Defense-in-Depth</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">
+                      We utilize a multi-layered approach involving <strong>Hardware</strong> (TPM 2.0 Check), <strong>Kernel</strong> (SELinux Mandatory Access Control), 
+                      and <strong>Application</strong> (Cognitive Firewall) security.
+                  </p>
+              </div>
+              <div className="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                  <h3 className="font-bold text-white mb-3">Open Source Stack</h3>
+                  <ul className="text-sm text-slate-400 space-y-2">
+                      <li className="flex items-center gap-2"><CheckCircle2 size={12} className="text-green-500"/> <strong>Wazuh</strong>: SIEM & Intrusion Detection</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 size={12} className="text-green-500"/> <strong>Falco</strong>: Runtime container security</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 size={12} className="text-green-500"/> <strong>ClamAV</strong>: Anti-virus engine</li>
+                      <li className="flex items-center gap-2"><CheckCircle2 size={12} className="text-green-500"/> <strong>Snort</strong>: Network Intrusion Prevention (NIPS)</li>
+                  </ul>
+              </div>
+          </div>
+
+          <div className="bg-red-900/10 border border-red-500/30 p-6 rounded-xl">
+              <h3 className="font-bold text-white mb-2 text-lg">Anti-Phishing & Social Engineering</h3>
+              <p className="text-sm text-slate-300">
+                  The <strong>Cognitive Firewall</strong> analyzes incoming messages and emails for sentiment anomalies, urgency triggers, and linguistic patterns 
+                  typical of social engineering attacks. Links are sandboxed and pre-scanned before you click.
+              </p>
+          </div>
+      </div>
+  );
+
   const renderDevGuide = () => {
       if (!isAuth) {
           return (
@@ -410,6 +448,7 @@ const DocumentationHub: React.FC = () => {
                   { id: 'PRICING', label: 'Pricing & FinOps', icon: DollarSign },
                   { id: 'FRAMEWORKS', label: 'Framework Registry', icon: Package },
                   { id: 'BROWSER', label: 'Browser Guide', icon: Globe },
+                  { id: 'SECURITY_GUIDE', label: 'Security & Compliance', icon: Shield },
               ].map(item => (
                   <button
                     key={item.id}
@@ -423,7 +462,7 @@ const DocumentationHub: React.FC = () => {
               <div className="mt-4 pt-4 border-t border-slate-800">
                   <div className="px-4 text-[10px] font-bold text-slate-500 uppercase mb-2">Restricted Area</div>
                   <button onClick={() => setActiveSection('DEV_GUIDE')} className={`w-full text-left px-4 py-3 rounded-lg text-sm font-bold transition flex items-center gap-3 border ${activeSection === 'DEV_GUIDE' ? 'bg-red-600 text-white border-red-500' : 'text-red-400 border-red-900/30 hover:bg-red-900/10'}`}>
-                      <Shield size={16}/> Developer Guide
+                      <Lock size={16}/> Developer Guide
                   </button>
               </div>
           </div>
@@ -437,6 +476,7 @@ const DocumentationHub: React.FC = () => {
               {activeSection === 'PRICING' && renderPricingDoc()}
               {activeSection === 'FRAMEWORKS' && renderFrameworksDoc()}
               {activeSection === 'BROWSER' && renderBrowserDoc()}
+              {activeSection === 'SECURITY_GUIDE' && renderSecurityGuide()}
               {activeSection === 'DEV_GUIDE' && renderDevGuide()}
           </div>
       </div>

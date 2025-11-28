@@ -5,6 +5,8 @@
 
 
 
+
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { AgentRole, ChainNode, LLMArchitecture, RAGSearchResult, IQScore, ServerEnvironment } from "../types";
 
@@ -723,4 +725,46 @@ export const getDCIMData = async (): Promise<any> => {
         renewables: 85 + Math.random() * 10, // %
         racks
     };
+};
+
+// --- SECURITY SENTINEL SIMULATION ---
+
+export const analyzeApiKey = async (key: string): Promise<{safe: boolean, risk: string, source: string}> => {
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    if (key.includes('test') || key.length < 20) {
+        return { safe: false, risk: 'Weak Entropy / Test Key', source: 'Pattern Match' };
+    }
+    // Simulate checking databases
+    if (Math.random() > 0.8) {
+        return { safe: false, risk: 'Leaked Credential', source: 'HaveIBeenPwned API' };
+    }
+    return { safe: true, risk: 'None', source: 'Megam Threat Database' };
+};
+
+export const getThreatFeed = async (): Promise<any[]> => {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const types = ['SQL Injection', 'XSS', 'Brute Force', 'Port Scan', 'DDoS Volumetric', 'Phishing URL'];
+    const sources = ['192.168.1.105', '45.33.22.11', '10.254.0.1', '89.12.33.44', '203.0.113.5'];
+    
+    return Array.from({length: 5}, () => ({
+        id: Math.random().toString(36).substr(2, 9),
+        type: types[Math.floor(Math.random() * types.length)],
+        source: sources[Math.floor(Math.random() * sources.length)],
+        severity: Math.random() > 0.7 ? 'CRITICAL' : Math.random() > 0.4 ? 'HIGH' : 'MEDIUM',
+        timestamp: new Date().toLocaleTimeString()
+    }));
+};
+
+export const generateSecurityPatch = async (threatType: string): Promise<string> => {
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: `Generate a Linux security hardening script (iptables, selinux, or config) to mitigate: "${threatType}". Return ONLY the code block.`,
+            config: { systemInstruction: "You are a Cyber Security Engineer. Write standard bash/config scripts." }
+        });
+        return response.text || '# No patch generated';
+    } catch (error) {
+        return '# Error generating patch';
+    }
 };
