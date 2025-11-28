@@ -23,6 +23,8 @@ export enum AppView {
   BADAL_RAG = 'BADAL_RAG',
   BADAL_RAAG = 'BADAL_RAAG',
   BADAL_PHONE = 'BADAL_PHONE',
+  MEGAM_MARKETING = 'MEGAM_MARKETING',
+  MEGAM_DC = 'MEGAM_DC',
 }
 
 export interface WindowState {

@@ -3,6 +3,10 @@
 
 
 
+
+
+
+
 import React, { useState } from 'react';
 import { AppView } from '../../types';
 import { 
@@ -30,7 +34,9 @@ import {
   RefreshCw,
   Image as ImageIcon,
   Music,
-  Smartphone
+  Smartphone,
+  Megaphone,
+  Box
 } from 'lucide-react';
 
 interface DesktopProps {
@@ -91,6 +97,7 @@ const Desktop: React.FC<DesktopProps> = ({ onLaunchApp }) => {
                <DesktopIcon label="Server Admin" icon={Server} onClick={() => onLaunchApp(AppView.SERVER)} color="text-indigo-400"/>
                <DesktopIcon label="Infrastructure" icon={Cpu} onClick={() => onLaunchApp(AppView.INFRASTRUCTURE)} color="text-purple-400"/>
                <DesktopIcon label="VPN Manager" icon={Shield} onClick={() => onLaunchApp(AppView.VPN)} color="text-orange-400"/>
+               <DesktopIcon label="Megam VDC" icon={Box} onClick={() => onLaunchApp(AppView.MEGAM_DC)} color="text-slate-200"/>
                <DesktopIcon label="Badal Auth" icon={UserCheck} onClick={() => onLaunchApp(AppView.BADAL_AUTH)} color="text-cyan-300"/>
            </AppContainer>
 
@@ -128,6 +135,10 @@ const Desktop: React.FC<DesktopProps> = ({ onLaunchApp }) => {
            <AppContainer title="Creative Suite">
                <DesktopIcon label="BadalRAAG" icon={Music} onClick={() => onLaunchApp(AppView.BADAL_RAAG)} color="text-pink-600"/>
                <DesktopIcon label="BadalPhone" icon={Smartphone} onClick={() => onLaunchApp(AppView.BADAL_PHONE)} color="text-green-500"/>
+           </AppContainer>
+
+           <AppContainer title="Growth Suite">
+               <DesktopIcon label="Megam Mktg" icon={Megaphone} onClick={() => onLaunchApp(AppView.MEGAM_MARKETING)} color="text-rose-500"/>
            </AppContainer>
        </div>
 

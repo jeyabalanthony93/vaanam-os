@@ -8,6 +8,10 @@
 
 
 
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
@@ -27,7 +31,9 @@ import {
   Book,
   Database,
   Music,
-  Smartphone
+  Smartphone,
+  Megaphone,
+  Box
 } from 'lucide-react';
 
 import BootSequence from './components/os/BootSequence';
@@ -57,6 +63,8 @@ import BadalRAG from './components/BadalRAG'; // New import
 import MegamBrowser from './components/MegamBrowser'; // New import
 import BadalRAAG from './components/BadalRAAG'; // New import
 import BadalPhone from './components/BadalPhone'; // New import
+import MegamMarketing from './components/MegamMarketing'; // New import
+import MegamDataCenter from './components/MegamDataCenter'; // New import
 
 import { AppView, WindowState, BootStep, SystemStats } from './types';
 
@@ -84,6 +92,8 @@ const APP_CONFIG: Record<AppView, { title: string, icon: any, defaultSize: { wid
   [AppView.BADAL_RAG]: { title: 'Badal RAG Server', icon: Database, defaultSize: { width: 1100, height: 800 } },
   [AppView.BADAL_RAAG]: { title: 'BadalRAAG Audio Workstation', icon: Music, defaultSize: { width: 1100, height: 800 } },
   [AppView.BADAL_PHONE]: { title: 'BadalPhone (Ephone)', icon: Smartphone, defaultSize: { width: 420, height: 820 } },
+  [AppView.MEGAM_MARKETING]: { title: 'Megam Marketing Suite', icon: Megaphone, defaultSize: { width: 1100, height: 800 } },
+  [AppView.MEGAM_DC]: { title: 'Megam Virtual Data Center', icon: Box, defaultSize: { width: 1200, height: 850 } },
 };
 
 const App: React.FC = () => {
@@ -192,6 +202,8 @@ const App: React.FC = () => {
       case AppView.BADAL_RAAG: return <BadalRAAG />;
       case AppView.BADAL_PHONE: return <BadalPhone />;
       case AppView.BROWSER: return <MegamBrowser />;
+      case AppView.MEGAM_MARKETING: return <MegamMarketing />;
+      case AppView.MEGAM_DC: return <MegamDataCenter />;
       default: return <div className="p-4 text-white">App not found</div>;
     }
   };

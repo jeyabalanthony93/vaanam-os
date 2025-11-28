@@ -1,5 +1,9 @@
 
 
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { AppView, WindowState } from '../../types';
 import { Wifi, Battery, Volume2, Search, Power, ChevronUp, Terminal } from 'lucide-react';
@@ -51,6 +55,8 @@ const Taskbar: React.FC<TaskbarProps> = ({ windows, activeWindowId, onWindowClic
                 <MenuButton label="Badal Auth" onClick={() => { onLaunchApp(AppView.BADAL_AUTH); setMenuOpen(false); }} />
                 <MenuButton label="BadalRAAG" onClick={() => { onLaunchApp(AppView.BADAL_RAAG); setMenuOpen(false); }} />
                 <MenuButton label="BadalPhone" onClick={() => { onLaunchApp(AppView.BADAL_PHONE); setMenuOpen(false); }} />
+                <MenuButton label="Megam Marketing" onClick={() => { onLaunchApp(AppView.MEGAM_MARKETING); setMenuOpen(false); }} />
+                <MenuButton label="Megam Data Center" onClick={() => { onLaunchApp(AppView.MEGAM_DC); setMenuOpen(false); }} />
              </div>
 
              <div className="mt-2 pt-3 border-t border-slate-700 flex justify-between items-center text-slate-400">

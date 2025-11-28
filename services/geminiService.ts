@@ -1,6 +1,10 @@
 
 
 
+
+
+
+
 import { GoogleGenAI, Type } from "@google/genai";
 import { AgentRole, ChainNode, LLMArchitecture, RAGSearchResult, IQScore, ServerEnvironment } from "../types";
 
@@ -656,3 +660,67 @@ export const getPhoneSystemStats = async (): Promise<any> => {
         network: { type: '5G + Neural Bridge', signal: 98 }
     };
 }
+
+// --- MARKETING SUITE SIMULATION ---
+
+export const performSEOAudit = async (url: string): Promise<any> => {
+    await new Promise(resolve => setTimeout(resolve, 1800));
+    return {
+        domainAuthority: Math.floor(Math.random() * 60) + 20,
+        backlinks: Math.floor(Math.random() * 5000) + 100,
+        organicTraffic: Math.floor(Math.random() * 10000) + 500,
+        healthScore: Math.floor(Math.random() * 30) + 70,
+        keywords: [
+            { term: "cloud os", pos: 3, vol: 4500 },
+            { term: "neural bridge", pos: 1, vol: 1200 },
+            { term: "open source saas", pos: 5, vol: 890 }
+        ]
+    };
+};
+
+export const monitorMediaMentions = async (keyword: string): Promise<any[]> => {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    return [
+        { source: 'TechCrunch', title: `Why ${keyword} is disrupting the market`, sentiment: 'Positive', time: '2h ago' },
+        { source: 'Twitter', title: `@user: Just tried ${keyword}, insane performance!`, sentiment: 'Positive', time: '15m ago' },
+        { source: 'Reddit', title: `Is ${keyword} really open source?`, sentiment: 'Neutral', time: '4h ago' },
+        { source: 'Forbes', title: `Top 10 Cloud Tools in 2024`, sentiment: 'Positive', time: '1d ago' },
+    ];
+};
+
+export const paraphraseContent = async (text: string, mode: string): Promise<string> => {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: `Rewrite this text in '${mode}' tone: "${text}"`,
+            config: { systemInstruction: "You are an expert AI editor. Return only the rewritten text." }
+        });
+        return response.text || text;
+    } catch (e) {
+        return text;
+    }
+};
+
+export const getDCIMData = async (): Promise<any> => {
+    await new Promise(resolve => setTimeout(resolve, 800));
+    const racks = [];
+    for (let r = 1; r <= 10; r++) {
+        racks.push({
+            id: `RACK-${r < 10 ? '0'+r : r}`,
+            temp: Math.floor(Math.random() * 15) + 20, // 20-35 C
+            power: Math.floor(Math.random() * 5000) + 2000, // Watts
+            units: Array.from({length: 42}, (_, i) => ({
+                id: `U${42-i}`,
+                status: Math.random() > 0.9 ? 'ERROR' : Math.random() > 0.2 ? 'ACTIVE' : 'IDLE',
+                type: Math.random() > 0.7 ? 'GPU_NODE' : 'STORAGE_ARRAY'
+            }))
+        });
+    }
+    return {
+        pue: 1.08 + Math.random() * 0.05,
+        totalPower: Math.floor(Math.random() * 500) + 1200, // kW
+        renewables: 85 + Math.random() * 10, // %
+        racks
+    };
+};

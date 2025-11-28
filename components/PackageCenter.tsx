@@ -1,13 +1,15 @@
 
 
+
+
 import React, { useState } from 'react';
-import { Package, Download, Search, Server, Database, Code, Shield, Box, CheckCircle2, Zap, Layers, BarChart3, Cpu, CreditCard, BookOpen, Terminal, Play, Wand2, Copy, Loader2, Settings, Layout, Globe, Lock, Video, Image as ImageIcon, Smartphone, Cloud, GitBranch, Key, Activity, Lightbulb, FileCode, ArrowRight, X, Music, Radio } from 'lucide-react';
+import { Package, Download, Search, Server, Database, Code, Shield, Box, CheckCircle2, Zap, Layers, BarChart3, Cpu, CreditCard, BookOpen, Terminal, Play, Wand2, Copy, Loader2, Settings, Layout, Globe, Lock, Video, Image as ImageIcon, Smartphone, Cloud, GitBranch, Key, Activity, Lightbulb, FileCode, ArrowRight, X, Music, Radio, Megaphone } from 'lucide-react';
 import { generatePackageScript } from '../services/geminiService';
 
 interface PackageItem {
   id: string;
   name: string;
-  category: 'WEB' | 'DATA' | 'DEVOPS' | 'OS' | 'SERVER' | 'APP' | 'DEV' | 'SECURITY' | 'API' | 'AUDIO' | 'MOBILE';
+  category: 'WEB' | 'DATA' | 'DEVOPS' | 'OS' | 'SERVER' | 'APP' | 'DEV' | 'SECURITY' | 'API' | 'AUDIO' | 'MOBILE' | 'MARKETING';
   description: string;
   version: string;
   installed: boolean;
@@ -51,6 +53,12 @@ const PACKAGES: PackageItem[] = [
   { id: 'juce', name: 'JUCE', category: 'AUDIO', description: 'C++ framework for audio applications and plugins.', version: '7.0.9', installed: false, icon: Radio, tags: ['VST', 'C++'], installCmd: 'git clone https://github.com/juce-framework/JUCE.git', configSnippet: '#include <JuceHeader.h>' },
   { id: 'ffmpeg', name: 'FFmpeg', category: 'AUDIO', description: 'Complete solution to record, convert and stream audio/video.', version: '6.1', installed: true, icon: Terminal, tags: ['CLI', 'Media'], installCmd: 'apt-get install ffmpeg', configSnippet: 'ffmpeg -i input.mp4 output.mp3' },
 
+  // --- NEW: MARKETING ---
+  { id: 'mautic', name: 'Mautic', category: 'MARKETING', description: 'Open Source Marketing Automation Platform.', version: '5.0.0', installed: false, icon: Megaphone, tags: ['Automation', 'Email'], installCmd: 'composer create-project mautic/recommended-project', configSnippet: 'php bin/console mautic:segments:update' },
+  { id: 'matomo', name: 'Matomo', category: 'MARKETING', description: 'Google Analytics alternative that protects your data.', version: '5.0.2', installed: false, icon: BarChart3, tags: ['Analytics', 'Privacy'], installCmd: 'apt-get install matomo', configSnippet: './console core:archive' },
+  { id: 'ghost', name: 'Ghost', category: 'MARKETING', description: 'Turn your audience into a business. Publishing platform.', version: '5.79.0', installed: false, icon: FileCode, tags: ['CMS', 'Blog'], installCmd: 'npm install ghost-cli -g', configSnippet: 'ghost install' },
+  { id: 'listmonk', name: 'Listmonk', category: 'MARKETING', description: 'High performance, self-hosted newsletter and mailing list manager.', version: '3.0.0', installed: false, icon: Megaphone, tags: ['Newsletter', 'Go'], installCmd: 'docker run listmonk/listmonk', configSnippet: './listmonk --config config.toml' },
+
   // --- EXISTING APIs ---
   { id: 'badal-auth', name: 'Badal Auth API', category: 'API', description: 'Unified Identity Management and SSO provider.', version: 'v2.1', installed: true, icon: Shield, tags: ['Megam OS', 'Auth'], installCmd: 'npm install @badal/auth', configSnippet: 'const auth = new BadalAuth({ key: process.env.BADAL_KEY });' },
   { id: 'badal-billing', name: 'Badal FinOps', category: 'API', description: 'Cost calculation engine.', version: 'v1.4', installed: false, icon: CreditCard, tags: ['Megam OS', 'Finance'], installCmd: 'npm install @badal/billing', configSnippet: 'const billing = new BadalBilling();' },
@@ -61,7 +69,7 @@ const PACKAGES: PackageItem[] = [
   { id: 'android-aosp', name: 'Android (AOSP)', category: 'OS', description: 'Open-source base for mobile operating systems.', version: '14.0', installed: false, icon: Smartphone, tags: ['Mobile', 'ARM'], installCmd: 'repo init -u https://android.googlesource.com/platform/manifest', configSnippet: 'source build/envsetup.sh' },
   { id: 'freebsd', name: 'FreeBSD', category: 'OS', description: 'Unix-like operating system known for stability.', version: '14.0', installed: false, icon: Server, tags: ['BSD', 'Unix'], installCmd: 'pkg install freebsd', configSnippet: 'freebsd-version' },
 
-  // --- NEW: MOBILE & EDGE ---
+  // --- EXISTING MOBILE & EDGE ---
   { id: 'react-native', name: 'React Native', category: 'MOBILE', description: 'Build native apps using React.', version: '0.73.0', installed: true, icon: Code, tags: ['Cross-Platform'], installCmd: 'npx react-native init', configSnippet: 'import { View } from "react-native"' },
   { id: 'flutter', name: 'Flutter', category: 'MOBILE', description: 'UI toolkit for building beautiful, natively compiled applications.', version: '3.16.0', installed: false, icon: Layout, tags: ['Dart', 'UI'], installCmd: 'flutter create my_app', configSnippet: 'runApp(MyApp());' },
   { id: 'tensorflow-lite', name: 'TensorFlow Lite', category: 'MOBILE', description: 'Deploy machine learning models on mobile and edge devices.', version: '2.14.0', installed: true, icon: Cpu, tags: ['Edge AI', 'NPU'], installCmd: 'pip install tflite-runtime', configSnippet: 'interpreter = tf.lite.Interpreter(model_path="model.tflite")' },
@@ -143,7 +151,7 @@ def process_invoice_image(invoice_id, image_path):
 
 const PackageCenter: React.FC = () => {
   const [activeView, setActiveView] = useState<'STORE' | 'GUIDE' | 'MAGIC_BOX' | 'SOLUTIONS'>('STORE');
-  const [activeCategory, setActiveCategory] = useState<'ALL' | 'WEB' | 'DATA' | 'DEVOPS' | 'OS' | 'SERVER' | 'APP' | 'DEV' | 'SECURITY' | 'API' | 'AUDIO' | 'MOBILE'>('ALL');
+  const [activeCategory, setActiveCategory] = useState<'ALL' | 'WEB' | 'DATA' | 'DEVOPS' | 'OS' | 'SERVER' | 'APP' | 'DEV' | 'SECURITY' | 'API' | 'AUDIO' | 'MOBILE' | 'MARKETING'>('ALL');
   const [search, setSearch] = useState('');
   const [items, setItems] = useState(PACKAGES);
   const [installingId, setInstallingId] = useState<string | null>(null);
@@ -260,6 +268,7 @@ const PackageCenter: React.FC = () => {
                             { id: 'SERVER', label: 'Servers', icon: Server },
                             { id: 'WEB', label: 'Web Dev', icon: Code },
                             { id: 'MOBILE', label: 'Mobile & Edge', icon: Smartphone },
+                            { id: 'MARKETING', label: 'Marketing', icon: Megaphone },
                             { id: 'DATA', label: 'AI & Data', icon: Database },
                             { id: 'DEVOPS', label: 'DevOps', icon: Layers },
                             { id: 'APP', label: 'Apps', icon: Layout },
